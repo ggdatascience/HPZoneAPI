@@ -11,12 +11,12 @@ API_env$client_secret = NA
 
 #' Initialisation function to define API credentials. This function must be called before anything else, as the details supplied in this call are required for use.
 #'
-#' @param client_id
-#' @param client_secret
-#' @param standard
-#' @param extended
-#' @param token_url
-#' @param data_url
+#' @param client_id Client ID as supplied by InFact.
+#' @param client_secret Client secret as supplied by InFact.
+#' @param standard Name of the standard scope. Usually an abbreviation of the GGD name and "_standard", e.g. "rr_standard".
+#' @param extended Name of the extended scope. Usually an abbreviation of the GGD name and "_extended", e.g. "nog_extended".
+#' @param token_url Address of the token server.
+#' @param data_url Address of the data server.
 #'
 #' @return
 #' @importFrom httr2 oauth_client

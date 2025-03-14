@@ -22,7 +22,7 @@ HPZone_necessary_scope = function (fields, endpoint="Cases", resolve_fieldnames=
   }
 
   if (resolve_fieldnames) {
-    fields = HPZone_make_valid(fields)
+    fields = HPZone_make_valid(fields=fields)
   }
 
   required_scope = "standard"

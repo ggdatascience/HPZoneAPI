@@ -1,7 +1,7 @@
 test_that("make_valid allows case mismatch and truncation in endpoints", {
-  expect_equal(HPZone_make_valid(endpoints="case"), "Cases")
-  expect_equal(HPZone_make_valid(endpoints="cases"), "Cases")
-  expect_equal(HPZone_make_valid(endpoints=c("cases", "contact", "enq")), c("Cases", "Contacts", "Enquiries"))
+  expect_equal(HPZone_make_valid(endpoints="case"), "cases")
+  expect_equal(HPZone_make_valid(endpoints="cases"), "cases")
+  expect_equal(HPZone_make_valid(endpoints=c("cases", "contact", "enq")), c("cases", "contacts", "enquiries"))
   expect_error(HPZone_make_valid(endpoints="casessss"))
 })
 

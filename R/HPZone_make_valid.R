@@ -1,9 +1,9 @@
-#' Title
+#' Takes a list of fields or endpoints and corrects them. This allows for short hand usage without having to check the documentation, e.g. 'Date of onset' instead of 'Date_of_onset'
 #'
-#' @param endpoints
-#' @param fields
+#' @param endpoints A list of desired endpoints.
+#' @param fields A list of desired fields.
 #'
-#' @return
+#' @return A list of properly formatted fields or endpoints.
 #' @importFrom stringr str_to_lower
 #' @importFrom stringr str_c
 #' @export
@@ -11,7 +11,7 @@
 #' @examples
 HPZone_make_valid = function (endpoints=NULL, fields=NULL) {
   if (!is.null(endpoints)) {
-    possible_endpoints = unique(HPZone_fields$endpoint)
+    possible_endpoints = unique(HPZone_fields$endpoint) |> str_to_lower()
     endpoints_valid = lapply(endpoints, \(x) {
       index = grep(x, possible_endpoints, ignore.case=T)
       if (length(index) != 1) stop("Invalid endpoint supplied: ", x)

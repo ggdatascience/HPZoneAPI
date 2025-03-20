@@ -7,14 +7,27 @@
 HPZone_setup(
   client_id,
   client_secret,
-  standard,
-  extended,
-  token_url = "https://login.ggdghor.nl/infactdev/oauth2/v1/token",
-  data_url = "http://85.90.69.239:8899/Edie"
+  standard = "standard",
+  extended = "extended",
+  token_url = "https://connect.govconext.nl/oidc/token",
+  data_url = "https://api.hpzone.nl:8899/Edie"
 )
 }
 \arguments{
-\item{data_url}{}
+\item{client_id}{Client ID as supplied by InFact.}
+
+\item{client_secret}{Client secret as supplied by InFact.}
+
+\item{standard}{Name of the standard scope. Default: "standard"}
+
+\item{extended}{Name of the extended scope. Default: "extended"}
+
+\item{token_url}{Address of the token server.}
+
+\item{data_url}{Address of the data server.}
+}
+\value{
+No return value.
 }
 \description{
 Initialisation function to define API credentials. This function must be called before anything else, as the details supplied in this call are required for use.

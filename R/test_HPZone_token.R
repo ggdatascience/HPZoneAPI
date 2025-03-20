@@ -1,7 +1,7 @@
-#' Title
+#' Tests the supplied HPZone token against the token endpoint. Note that this does not check the type of access, only the functionality of the token.
 #'
-#' @return
-#' @importFrom httr2 oath_flow_client_credentials
+#' @return No return value.
+#' @importFrom httr2 oauth_flow_client_credentials
 #' @export
 #'
 #' @examples

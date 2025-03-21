@@ -18,7 +18,7 @@ API_env$client_secret = NA
 #' @param token_url Address of the token server.
 #' @param data_url Address of the data server.
 #'
-#' @return
+#' @return No return value.
 #' @importFrom httr2 oauth_client
 #' @export
 #'

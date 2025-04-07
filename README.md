@@ -61,7 +61,7 @@ Een simpel voorbeeld is het ophalen van de 50 meest recente casussen:
 ``` r
 library(HPZoneAPI)
 
-# let op: HPZone_setup() kan ook uitgevoerd worden zonder argumenten, als HPZone_store_credentials eerder is uitgevoerd
+# let op: HPZone_setup() kan ook uitgevoerd worden zonder argumenten, als HPZone_store_credentials() eerder is uitgevoerd
 HPZone_setup("client_id van je GGD", "client_secret van je GGD")
 HPZone_request("cases(take: 50, order: [{ Case_creation_date: DESC }]) { items { Case_identifier }, totalCount }")
 ```
@@ -70,7 +70,7 @@ HPZone_request("cases(take: 50, order: [{ Case_creation_date: DESC }]) { items {
 ``` r
 library(HPZoneAPI)
 
-# let op: HPZone_setup() kan ook uitgevoerd worden zonder argumenten, als HPZone_store_credentials eerder is uitgevoerd
+# let op: HPZone_setup() kan ook uitgevoerd worden zonder argumenten, als HPZone_store_credentials() eerder is uitgevoerd
 HPZone_setup("client_id van je GGD", "client_secret van je GGD")
 cur_year = 2025
 fields = "ABR, Date_of_onset, Infection"

@@ -2,11 +2,12 @@
 % Please edit documentation in R/HPZone_setup.R
 \name{HPZone_setup}
 \alias{HPZone_setup}
-\title{Initialisation function to define API credentials. This function must be called before anything else, as the details supplied in this call are required for use.}
+\title{Initialisation function to define API credentials. This function must be called before anything else, as the details supplied in this call are required for use.
+Note that client_id and client_secret should preferably not be supplied in this call, but rather stored using [HPZone_store_credentials()].}
 \usage{
 HPZone_setup(
-  client_id,
-  client_secret,
+  client_id = NA,
+  client_secret = NA,
   standard = "standard",
   extended = "extended",
   token_url = "https://connect.govconext.nl/oidc/token",
@@ -31,4 +32,5 @@ No return value.
 }
 \description{
 Initialisation function to define API credentials. This function must be called before anything else, as the details supplied in this call are required for use.
+Note that client_id and client_secret should preferably not be supplied in this call, but rather stored using [HPZone_store_credentials()].
 }

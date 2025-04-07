@@ -15,6 +15,21 @@ Je kunt de huidige versie van HPZoneAPI installeren vanaf [GitHub](https://githu
 devtools::install_github("ggdatascience/HPZoneAPI")
 ```
 
+## Beveiliging
+
+De API key vereist een client ID en client secret voor gebruik. Om deze niet in je script te hoeven zetten wordt de keyring package gebruikt om de informatie op te slaan in de keyring van je OS. Dit betekent dat je per computer éénmalig de benodigde informatie moet invoeren, waarna deze beveiligd wordt opgeslagen. Hierbij wordt gebruik gemaakt van extra versleuteling, zodat andere processen, die in theorie ook bij deze keyring zouden kunnen, geen toegang hebben tot de data. Instellen gaat door het aanroepen van de functie *HPZone_store_credentials()*, welke interactief zal vragen om de benodigde informatie. Hierna kan *HPZone_setup()* zonder argumenten worden uitgevoerd.
+
+Eenmalig:
+``` r
+HPZone_store_credentials()
+```
+
+Later gebruik in een script:
+``` r
+HPZone_setup()
+HPZone_request("iets")
+```
+
 ## Gebruik
 
 De package kan globaal gezien op twee manieren gebruikt worden: 1) als simpele wrapper om de aanroep van de API te vergemakkelijken, of 2) als uitbreiding op de workflow om gebruik in code te verkorten. De ontwikkeling is vooral gericht op scenario 2, waarbij een onderzoeker vanuit R makkelijk queries wil kunnen uitvoeren. Alle elementen die volgen uit technische specificaties van de API worden hiermee zoveel mogelijk uit handen genomen. Denk hierbij bijvoorbeeld aan een maximaal aantal rijen per aanvraag, het gebruik van quotes in een query, en het omgaan met datatypes. Hierdoor kan de volgende code bijvoorbeeld flink worden ingekort.
@@ -46,6 +61,7 @@ Een simpel voorbeeld is het ophalen van de 50 meest recente casussen:
 ``` r
 library(HPZoneAPI)
 
+# let op: HPZone_setup() kan ook uitgevoerd worden zonder argumenten, als HPZone_store_credentials eerder is uitgevoerd
 HPZone_setup("client_id van je GGD", "client_secret van je GGD")
 HPZone_request("cases(take: 50, order: [{ Case_creation_date: DESC }]) { items { Case_identifier }, totalCount }")
 ```
@@ -54,6 +70,7 @@ HPZone_request("cases(take: 50, order: [{ Case_creation_date: DESC }]) { items {
 ``` r
 library(HPZoneAPI)
 
+# let op: HPZone_setup() kan ook uitgevoerd worden zonder argumenten, als HPZone_store_credentials eerder is uitgevoerd
 HPZone_setup("client_id van je GGD", "client_secret van je GGD")
 cur_year = 2025
 fields = "ABR, Date_of_onset, Infection"
@@ -87,3 +104,4 @@ HPZone_necessary_scope(c("Diagnosis", "Case_number", "Entered_by"))
 - HPZone_necessary_scope() - accepteert een lijst met veldnamen en retourneert de benodigde scope
 - test_HPZone_token() - controleert of de ingevoerde API key correct is
 - HPZone_setup() - initialisatiefunctie die altijd als eerste moet worden uitgevoerd
+- HPZone_store_credentials() - slaat de API credentials op een veilige manier op voor makkelijker hergebruik

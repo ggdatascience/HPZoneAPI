@@ -4,10 +4,16 @@
 \alias{HPZone_request_paginated}
 \title{Performs a HPZone request with the given parameters.}
 \usage{
-HPZone_request_paginated(query, n_max = 500, scope = API_env$scope_standard)
+HPZone_request_paginated(
+  query,
+  ...,
+  n_max = 500,
+  scope = API_env$scope_standard
+)
 }
 \arguments{
-\item{query}{A GraphQL query to send to the HPZone API. Note that keywords 'skip' and 'take' cannot be present in the query; this function will add them.}
+\item{query}{A GraphQL query to send to the HPZone API. Note that keywords 'skip' and 'take' cannot be present in the query; this function will add them.
+#' @param ... Parameters to be passed to sprintf(). If empty, the body is not passed through sprintf().}
 
 \item{n_max}{Maximum number of entries to request per call.}
 

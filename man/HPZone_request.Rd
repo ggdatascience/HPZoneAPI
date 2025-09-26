@@ -4,10 +4,11 @@
 \alias{HPZone_request}
 \title{Performs a HPZone request with the given parameters.}
 \usage{
-HPZone_request(query, scope = API_env$scope_standard)
+HPZone_request(query, ..., scope = API_env$scope_standard)
 }
 \arguments{
-\item{query}{A GraphQL query to send to the HPZone API.}
+\item{query}{A GraphQL query to send to the HPZone API.
+#' @param ... Parameters to be passed to sprintf(). If empty, the body is not passed through sprintf().}
 
 \item{scope}{The desired scope; either standard or extended.}
 }

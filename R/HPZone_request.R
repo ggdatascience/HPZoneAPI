@@ -35,13 +35,14 @@ HPZone_request_raw = function (body, scope=API_env$scope_standard) {
 #' Performs a HPZone request with the given parameters.
 #'
 #' @param query A GraphQL query to send to the HPZone API.
+#' #' @param ... Parameters to be passed to sprintf(). If empty, the body is not passed through sprintf().
 #' @param scope The desired scope; either standard or extended.
 #'
 #' @return An object containing the requested data points. This can be in different forms, depending on the request, but is simplified as much as possible.
 #' @export
 #'
 #' @examples
-HPZone_request = function (query, scope=API_env$scope_standard) {
+HPZone_request = function (query, ..., scope=API_env$scope_standard) {
   if (!API_env$init_run) {
     stop("The package has not yet been initialized. Run HPZone_setup() first.")
   }
@@ -49,7 +50,11 @@ HPZone_request = function (query, scope=API_env$scope_standard) {
   if (scope == "standard") scope = API_env$scope_standard
   if (scope == "extended") scope = API_env$scope_extended
 
-  data = HPZone_request_raw(paste0('{"query": "{', gsub('"', '\\\\"', query) , '}"}'))
+  if (...length() > 0) {
+    query = sprintf(query, ...)
+  }
+
+  data = HPZone_request_raw(paste0('{"query": "{', gsub('"', '\\\\"', query) , '}"}'), scope=scope)
   # eliminate unnecessary listing; the format is something weird like data$cases$items
   while (length(data) == 1 && is.list(data)) {
     data = data[[1]]
@@ -62,6 +67,7 @@ HPZone_request = function (query, scope=API_env$scope_standard) {
 #' Performs a HPZone request with the given parameters.
 #'
 #' @param query A GraphQL query to send to the HPZone API. Note that keywords 'skip' and 'take' cannot be present in the query; this function will add them.
+#' #' @param ... Parameters to be passed to sprintf(). If empty, the body is not passed through sprintf().
 #' @param n_max Maximum number of entries to request per call.
 #' @param scope The desired scope; either standard or extended.
 #'
@@ -73,7 +79,7 @@ HPZone_request = function (query, scope=API_env$scope_standard) {
 #' @importFrom stringr fixed
 #'
 #' @examples
-HPZone_request_paginated = function (query, n_max=500, scope=API_env$scope_standard) {
+HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_standard) {
   if (!API_env$init_run) {
     stop("The package has not yet been initialized. Run HPZone_setup() first.")
   }
@@ -107,11 +113,15 @@ HPZone_request_paginated = function (query, n_max=500, scope=API_env$scope_stand
     query = paste0(stringr::str_sub(query, end=pos-1), ", totalCount }")
   }
 
+  if (...length() > 0) {
+    query = sprintf(query, ...)
+  }
+
   n_retrieved = 0
   n_present = Inf
   data_total = data.frame()
   while (n_retrieved < n_present) {
-    data = HPZone_request_raw(paste0('{"query": "{', gsub('"', '\\\\"', sub("[pageblock]", paste0("take: ", n_max, ", skip: ", n_retrieved), query, fixed=T)) , '}"}'))
+    data = HPZone_request_raw(paste0('{"query": "{', gsub('"', '\\\\"', sub("[pageblock]", paste0("take: ", n_max, ", skip: ", n_retrieved), query, fixed=T)) , '}"}'), scope=scope, ...)
     # eliminate unnecessary listing; the format is something weird like data$cases$items
     while (length(data) == 1 && is.list(data)) {
       data = data[[1]]

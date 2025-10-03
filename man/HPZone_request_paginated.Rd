@@ -12,8 +12,9 @@ HPZone_request_paginated(
 )
 }
 \arguments{
-\item{query}{A GraphQL query to send to the HPZone API. Note that keywords 'skip' and 'take' cannot be present in the query; this function will add them.
-#' @param ... Parameters to be passed to sprintf(). If empty, the body is not passed through sprintf().}
+\item{query}{A GraphQL query to send to the HPZone API. Note that keywords 'skip' and 'take' cannot be present in the query; this function will add them.}
+
+\item{...}{Parameters to be passed to sprintf(). If empty, the body is not passed through sprintf().}
 
 \item{n_max}{Maximum number of entries to request per call.}
 
@@ -23,5 +24,18 @@ HPZone_request_paginated(
 A data frame containing all the responses gathered from the API. Only the items will be returned.
 }
 \description{
-Performs a HPZone request with the given parameters.
+Convenience wrapper around [HPZone_request_query()]. This function automatically pulls the available number of records, rather than only the first 500.
+Note that the current maximum for batching is 500 rows, so increasing n_max is not recommended.
+This function is mainly intended for use when the query builder in [HPZone_request()] is insufficient. Usage of [HPZone_request()] is considerably easier otherwise.
+}
+\examples{
+# Note the single quotes to facilitate double quote encapsulation for arguments.
+HPZone_request_paginated('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
+Or equal, making use of the sprintf integration:
+startdate = "2025-01-01"
+fields = c("Case_creation_date", "Case_number")
+HPZone_request_paginated('cases(where: { Case_creation_date: { gte: "\%s" } }) { items { \%s } }', startdate, stringr::str_c(fields, collapse=", "))
+}
+\seealso{
+[HPZone_request()], [HPZone_convert_dates()]
 }

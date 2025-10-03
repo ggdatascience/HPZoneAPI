@@ -34,3 +34,11 @@ No return value.
 Initialisation function to define API credentials. This function must be called before anything else, as the details supplied in this call are required for use.
 Note that client_id and client_secret should preferably not be supplied in this call, but rather stored using [HPZone_store_credentials()].
 }
+\examples{
+# Not recommended:
+HPZone_setup("id", "secret")
+
+# Recommended:
+HPZone_store_credentials() # call once
+HPZone_setup() # will automatically read stored credentials
+}

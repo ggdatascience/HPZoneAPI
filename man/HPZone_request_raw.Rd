@@ -7,7 +7,7 @@
 HPZone_request_raw(body, scope = API_env$scope_standard)
 }
 \arguments{
-\item{body}{A GraphQL query to send to the HPZone API.}
+\item{body}{A GraphQL query to send to the HPZone API, including all necessary bracketing and JSON-elements.}
 
 \item{scope}{The desired scope; either standard or extended.}
 }
@@ -15,5 +15,16 @@ HPZone_request_raw(body, scope = API_env$scope_standard)
 An object containing the requested data points. This can be in different forms, depending on the request.
 }
 \description{
-Performs a HPZone request with the given parameters.
+Note that there are several helper functions that make the use of the API a lot simpler; specifically [HPZone_request()], [HPZone_request_paginated()].
+This should only be used as a last resort; if manual GraphQL queries are required, [HPZone_request_query()] is highly advised instead.
+}
+\examples{
+# Note the difference between the raw and convenience functions.
+# These lines are equal:
+HPZone_request("cases", c("Case_creation_date", "Case_number"), where=c("Case_creation_date", ">=", "2025-01-01"))
+HPZone_request_query('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
+HPZone_request_raw('{"query": "{ cases(where: { Case_creation_date: { gte: \\\\"2025-01-01\\\\" } }) { items { Case_creation_date, Case_number } } }"}')
+}
+\seealso{
+[HPZone_request()], [HPZone_request_paginated()], [HPZone_request_query()]
 }

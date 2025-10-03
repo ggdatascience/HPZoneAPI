@@ -4,16 +4,29 @@
 \alias{HPZone_convert_dates}
 \title{Converts all relevant columns in the dataset to Date types.}
 \usage{
-HPZone_convert_dates(data, search = "dat(e|um)")
+HPZone_convert_dates(
+  data,
+  search = "dat(e|um)|Received_on",
+  statdate = "Date_stat"
+)
 }
 \arguments{
 \item{data}{A dataset returned by the API.}
 
 \item{search}{Column names to search for. Default: anything containing 'date' or 'datum'.}
+
+\item{statdate}{Desired column name for the date for statistics field.}
 }
 \value{
-An equivalent data.frame with Date types in the correct columns.
+An equivalent data.frame with Date types in the correct columns. Additionally, a column called 'Date_stat' is added, see Details.
 }
 \description{
-Converts all relevant columns in the dataset to Date types.
+Based on the available fields, a date for statistics is automatically generated, using the following logic:
+If cases: Date_of_onset > Datum_melding_aan_de_ggd > Case_creation_date.
+If situations: Start_date > Situation_creation_date
+If enquiries: Received_on > Date_closed
+}
+\examples{
+HPZone_request("cases", "basic", where=c("Case_creation_date", ">", "2025-01-01")) \%>\%
+  HPZone_convert_dates()
 }

@@ -5,10 +5,11 @@
 #' @export
 #'
 #' @examples
+#' HPZone_setup()
+#' # This will print the results.
+#' test_HPZone_token()
 test_HPZone_token = function () {
-  if (!API_env$init_run) {
-    stop("The package has not yet been initialized. Run HPZone_setup() first.")
-  }
+  check_setup()
 
   if (!is.na(API_env$scope_standard)) {
     print("Testing the standard scope credentials...")

@@ -4,17 +4,50 @@
 \alias{HPZone_request}
 \title{Performs a HPZone request with the given parameters.}
 \usage{
-HPZone_request(query, ..., scope = API_env$scope_standard)
+HPZone_request(endpoint, fields, where = NA, order = NA, verbose = F)
 }
 \arguments{
-\item{query}{A GraphQL query to send to the HPZone API.
-#' @param ... Parameters to be passed to sprintf(). If empty, the body is not passed through sprintf().}
+\item{endpoint}{The requested endpoint. Can be "cases", "situations", "enquiries", "contacts", or "actions". Case mismatch or spelling mismatch is automatically corrected with HPZone_make_valid().}
 
-\item{scope}{The desired scope; either standard or extended.}
+\item{fields}{A vector containing the required fields. Spelling is automatically corrected. Alternatively, the keywords "all" (all available fields), "basic" (usual fields for surveillance), or "none"/"id" (only HPZone ID and date) can be used.}
+
+\item{where}{Either a vector containing pairs of 3 arguments, a literal query string, or a list outlining the selection criteria. See details.}
+
+\item{order}{A vector of field=order pairs, e.g. c("Case_creation_date"="ASC"). If no order is supplied, ASC is assumed.}
+
+\item{verbose}{Whether or not to display the calculated query and scope; useful for debugging query issues.}
 }
 \value{
 An object containing the requested data points. This can be in different forms, depending on the request, but is simplified as much as possible.
 }
 \description{
-Performs a HPZone request with the given parameters.
+This function does most of the querybuilding for you, which allows for easier calling.
+There are several shorthands for field selection, the request is automatically paginated, and the necessary scope is automatically detected from the desired fields.
+Note that the take and skip elements are, by design, not present. If these are necessary, use [HPZone_request_query()] instead.
+}
+\details{
+The where clause can be specified in several formats. These can be:
+- A literal string containing GraphQL. E.g. 'Status: { eq: "Open" }'
+- A vector of strings containing three pairs: field, comparator, value. E.g. c("Status", "=", "Open"). Any usual R-style comparators are allowed and automatically translated, GraphQL comparators are left as-is.
+- A list detailing the structure of the query, containing name-value pairs of keyword-selectors. This allows for complex and/or-structures, see the bottom example.
+}
+\examples{
+# These statements are equal:
+HPZone_request("cases", "all", where=c("Case_creation_date", ">", "2025-10-01"))
+HPZone_request("cases", "all", where=c("Case_creation_date", "gt", "2025-10-01"))
+
+# Selects cases after 2025-09-01, ordered by infection and then descending date.
+HPZone_request("cases", "all", where=c("Case_creation_date", ">", "2025-09-01"), order=c("Infection", "Case_creation_date"="desc"))
+
+# Selects all cases which were registered after 2025-01-01 AND where Infection equals Leptospirosis.
+HPZone_request("cases", "all", where=list("and"=c("Case_creation_date", "gte", "2025-01-01", "Infection", "=", "Leptospirosis")))
+# Note that the default is AND, so this statement is equal:
+HPZone_request("cases", "all", where=c("Case_creation_date", "gte", "2025-01-01", "Infection", "=", "Leptospirosis"))
+
+# All cases after 2025-01-01 with either Leptospirosis or Malaria as infection.
+# Note the nested list; adding a c() without a list() will warp the structure of the list and break everything.
+HPZone_request("cases", "all", where=list("and"=list(c("Case_creation_date", "gte", "2025-01-01"), list("or"=c("Infection", "=", "Leptospirosis", "Infection", "==", "Malaria")))))
+}
+\seealso{
+[HPZone_request_paginated()], [HPZone_request_query()], [HPZone_make_valid()], [HPZone_convert_dates()]
 }

@@ -17,3 +17,8 @@ A list of properly formatted fields or endpoints.
 \description{
 Takes a list of fields or endpoints and corrects them. This allows for short hand usage without having to check the documentation, e.g. 'Date of onset' instead of 'Date_of_onset'
 }
+\examples{
+HPZone_make_valid("case") # should return "cases"
+HPZone_make_valid(fields="case_creation") # should return "Case_creation_date"
+HPZone_make_valid("case", fields=c("Family name", "Gp")) # should return c("Family_name", "Gp")
+}

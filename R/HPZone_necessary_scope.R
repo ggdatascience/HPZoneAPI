@@ -21,6 +21,16 @@ HPZone_necessary_scope = function (fields, endpoint="Cases", resolve_fieldnames=
     stop("No valid fields supplied.")
   }
 
+  if (!endpoint %in% HPZone_fields$endpoint) {
+    # case mismatch?
+    endpoints = unique(HPZone_fields$endpoint)
+    if (stringr::str_to_lower(endpoint) %in% stringr::str_to_lower(endpoints)) {
+      endpoint = endpoints[stringr::str_to_lower(endpoint) == stringr::str_to_lower(endpoints)]
+    } else {
+      stop("Invalid endpoint supplied: ", endpoint)
+    }
+  }
+
   if (resolve_fieldnames) {
     fields = HPZone_make_valid(fields=fields)
   }

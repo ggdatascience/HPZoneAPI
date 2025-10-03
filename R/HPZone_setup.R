@@ -27,6 +27,12 @@ API_env$client_secret = NA
 #' @export
 #'
 #' @examples
+#' # Not recommended:
+#' HPZone_setup("id", "secret")
+#'
+#' # Recommended:
+#' HPZone_store_credentials() # call once
+#' HPZone_setup() # will automatically read stored credentials
 HPZone_setup = function (client_id = NA, client_secret = NA, standard="standard", extended="extended",
                          token_url="https://connect.govconext.nl/oidc/token",
                          data_url="https://api.hpzone.nl:8899/Edie") {
@@ -64,7 +70,7 @@ HPZone_setup = function (client_id = NA, client_secret = NA, standard="standard"
 #' @param client_id True / false: whether the client_id should be stored.
 #' @param client_secret True / false: whether the client_secret should be stored.
 #'
-#' @return
+#' @return N/A
 #' @export
 #' @importFrom rstudioapi askForPassword
 #' @importFrom keyring key_set_with_value
@@ -84,5 +90,28 @@ HPZone_store_credentials = function (client_id = T, client_secret = T) {
   if (client_secret) {
     secret_secret = rstudioapi::askForPassword("Please enter the client_secret")
     keyring::key_set_with_value("HPZone_client_secret", password=safer::encrypt_string(secret_secret, key="Kdj(327KWpX%"))
+  }
+}
+
+
+#' Checks if the setup function has been run, or can be run automatically. If so, HPZone_setup() is called. If not, an error is thrown.
+#'
+#' @return TRUE if setup has been run or can be run by this function.
+#'
+#' @examples
+#' check_setup()
+check_setup = function () {
+  if (API_env$init_run) {
+    return(T)
+  }
+  if (!API_env$init_run) {
+    # check for stored credentials
+    stored_keys = keyring::key_list()
+    if ("HPZone_client_id" %in% stored_keys$service && "HPZone_client_secret" %in% stored_keys$service) {
+      HPZone_setup()
+      return(T)
+    } else {
+      stop("The package has not yet been initialized. Run HPZone_setup() first.")
+    }
   }
 }

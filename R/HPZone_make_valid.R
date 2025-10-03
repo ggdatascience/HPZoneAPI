@@ -9,18 +9,18 @@
 #' @export
 #'
 #' @examples
+#' HPZone_make_valid("case") # should return "cases"
+#' HPZone_make_valid(fields="case_creation") # should return "Case_creation_date"
+#' HPZone_make_valid("case", fields=c("Family name", "Gp")) # should return c("Family_name", "Gp")
 HPZone_make_valid = function (endpoints=NULL, fields=NULL) {
-  if (!is.null(endpoints)) {
-    possible_endpoints = unique(HPZone_fields$endpoint) |> str_to_lower()
-    endpoints_valid = lapply(endpoints, \(x) {
-      index = grep(x, possible_endpoints, ignore.case=T)
-      if (length(index) != 1) stop("Invalid endpoint supplied: ", x)
-      return(index)
-    }) |> unlist()
-    return(possible_endpoints[endpoints_valid])
-  } else if (!is.null(fields)) {
+  if (!is.null(fields)) {
     possible_fields = HPZone_fields$field
     possible_fields_hr = HPZone_fields$field_hr
+    if (!is.null(endpoints)) {
+      endpoints = HPZone_make_valid(endpoints)
+      possible_fields = HPZone_fields$field[stringr::str_to_lower(HPZone_fields$endpoint) %in% endpoints]
+      possible_fields_hr = HPZone_fields$field_hr[stringr::str_to_lower(HPZone_fields$endpoint) %in% endpoints]
+    }
     fields_valid = lapply(fields, \(x) {
       index = grep(x, possible_fields, ignore.case=T)
       if (length(index) == 0) {
@@ -31,7 +31,8 @@ HPZone_make_valid = function (endpoints=NULL, fields=NULL) {
         if (length(index) > 1) {
           # if one field matches exactly, minus case sensitivity, that's the one we want
           # otherwise: error
-          if (stringr::str_to_lower(x) %in% stringr::str_to_lower(possible_fields_hr[index])) {
+          if (stringr::str_to_lower(x) %in% stringr::str_to_lower(possible_fields_hr[index]) &&
+              sum(stringr::str_to_lower(x) == stringr::str_to_lower(possible_fields_hr[index])) == 1) {
             return(index[stringr::str_to_lower(x) == stringr::str_to_lower(possible_fields_hr[index])])
           }
           stop("Multiple fields match the supplied description (", x, "): ", stringr::str_c(possible_fields[index], collapse=", "))
@@ -40,7 +41,8 @@ HPZone_make_valid = function (endpoints=NULL, fields=NULL) {
       if (length(index) > 1) {
         # if one field matches exactly, minus case sensitivity, that's the one we want
         # otherwise: error
-        if (stringr::str_to_lower(x) %in% stringr::str_to_lower(possible_fields[index])) {
+        if (stringr::str_to_lower(x) %in% stringr::str_to_lower(possible_fields[index]) &&
+            sum(stringr::str_to_lower(x) %in% stringr::str_to_lower(possible_fields[index])) == 1) {
           return(index[stringr::str_to_lower(x) == stringr::str_to_lower(possible_fields[index])])
         }
         stop("Multiple fields match the supplied description (", x, "): ", stringr::str_c(possible_fields[index], collapse=", "))
@@ -48,5 +50,13 @@ HPZone_make_valid = function (endpoints=NULL, fields=NULL) {
       return(index)
     }) |> unlist()
     return(possible_fields[fields_valid])
+  } else if (!is.null(endpoints)) {
+    possible_endpoints = unique(HPZone_fields$endpoint) |> str_to_lower()
+    endpoints_valid = lapply(endpoints, \(x) {
+      index = grep(x, possible_endpoints, ignore.case=T)
+      if (length(index) != 1) stop("Invalid endpoint supplied: ", x)
+      return(index)
+    }) |> unlist()
+    return(possible_endpoints[endpoints_valid])
   }
 }

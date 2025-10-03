@@ -98,8 +98,6 @@ Zoals deze code laat zien is ook correcte spelling van de volgorde niet nodig; d
 
 ## Voorbeelden
 
-HPZone_request("cases", "all", where=list("and"=list(c("Case_creation_date", "gte", "2025-01-01"), list("or"=c("Infection", "=", "Leptospirosis", "Infection", "==", "Malaria")))))
-
 ### Casuistiek opvragen
 Een simpel voorbeeld is het ophalen van de 50 meest recente casussen:
 

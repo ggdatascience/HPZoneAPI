@@ -9,7 +9,7 @@ HPZone_request(endpoint, fields, where = NA, order = NA, verbose = F)
 \arguments{
 \item{endpoint}{The requested endpoint. Can be "cases", "situations", "enquiries", "contacts", or "actions". Case mismatch or spelling mismatch is automatically corrected with HPZone_make_valid().}
 
-\item{fields}{A vector containing the required fields. Spelling is automatically corrected. Alternatively, the keywords "all" (all available fields), "basic" (usual fields for surveillance), or "none"/"id" (only HPZone ID and date) can be used.}
+\item{fields}{A vector containing the required fields. Spelling is automatically corrected. Alternatively, the keywords "all" (all available fields), "basic" (usual fields for surveillance), "standard" (only fields in the standard scope), or "none"/"id" (only HPZone ID and date) can be used. "basic" and "standard" can be combined: c("basic", "Longitude", "Latitude")}
 
 \item{where}{Either a vector containing pairs of 3 arguments, a literal query string, or a list outlining the selection criteria. See details.}
 

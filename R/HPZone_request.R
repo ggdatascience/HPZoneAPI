@@ -170,7 +170,7 @@ HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_
 #' Note that the take and skip elements are, by design, not present. If these are necessary, use [HPZone_request_query()] instead.
 #'
 #' @param endpoint The requested endpoint. Can be "cases", "situations", "enquiries", "contacts", or "actions". Case mismatch or spelling mismatch is automatically corrected with HPZone_make_valid().
-#' @param fields A vector containing the required fields. Spelling is automatically corrected. Alternatively, the keywords "all" (all available fields), "basic" (usual fields for surveillance), or "none"/"id" (only HPZone ID and date) can be used. "basic" can be combined: c("basic", "Longitude", "Latitude")
+#' @param fields A vector containing the required fields. Spelling is automatically corrected. Alternatively, the keywords "all" (all available fields), "basic" (usual fields for surveillance), "standard" (only fields in the standard scope), or "none"/"id" (only HPZone ID and date) can be used. "basic" and "standard" can be combined: c("basic", "Longitude", "Latitude")
 #' @param where Either a vector containing pairs of 3 arguments, a literal query string, or a list outlining the selection criteria. See details.
 #' @param order A vector of field=order pairs, e.g. c("Case_creation_date"="ASC"). If no order is supplied, ASC is assumed.
 #' @param verbose Whether or not to display the calculated query and scope; useful for debugging query issues.
@@ -213,10 +213,14 @@ HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=F) {
 
   if (length(fields) == 1 && fields == "all") {
     fields = HPZone_fields$field[tolower(HPZone_fields$endpoint) == endpoint]
-  } else if (any(fields == "basics" || fields == "basic")) {
+  } else if (any(fields == "basics") || any(fields == "basic")) {
     # basic subset for each endpoint
-    fields = fields[!(fields == "basics" || fields == "basic")]
+    fields = fields[!(fields == "basics" | fields == "basic")]
     fields = c(fields, HPZone_fields$field[tolower(HPZone_fields$endpoint) == endpoint & HPZone_fields$in_basic])
+  } else if (any(fields == "standard")) {
+    # basic subset for each endpoint
+    fields = fields[!(fields == "standard")]
+    fields = c(fields, HPZone_fields$field[tolower(HPZone_fields$endpoint) == endpoint & HPZone_fields$scope_standard])
   } else if (length(fields) == 1 && (fields == "id" || fields == "none")) {
     # only request IDs
     if (endpoint == "cases")

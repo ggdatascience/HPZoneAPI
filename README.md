@@ -72,7 +72,13 @@ Kan een lijst met velden zijn, of één van de volgende keywords:
 
 - "all" - alle beschikbare velden binnen het gewenste endpoint
 - "basic" - een subset van velden die meestal gebruikt worden voor surveillance
+- "standard" - alle velden die binnen de scope standard vallen
 - "id"/"none" - alleen datum en HPZone ID (let op: het HPZone ID is anders dan de unique identifier!)
+
+Bij zowel "basic" als "standard" is het tevens mogelijk om de lijst uit te breiden:
+```r
+HPZone_request("cases", c("basic", "Latitude", "Longitude"))
+```
 
 Handige tip: de beschikbare velden zijn tevens aanwezig in de variabele *HPZone_fields*.
 
@@ -87,6 +93,16 @@ Als er geen AND of OR nodig is kan dit geheel worden overgeslagen en volstaat ee
 ```r
 HPZone_request("cases", "all", where=c("Case_creation_date", "gte", "2025-01-01"))
 ```
+
+Een serie van argumenten zonder logica wordt omgezet naar ANDs. Als je bijvoorbeeld alles in 2025 wil hebben kun je dit doen:
+```r
+HPZone_request("cases", "all", where=c("Case_creation_date", "gte", "2025-01-01", "Case_creation_date", "<", "2026-01-01"))
+```
+Wat identiek is aan dit:
+```r
+HPZone_request("cases", "all", where=list("and"=c("Case_creation_date", "gte", "2025-01-01", "Case_creation_date", "<", "2026-01-01")))
+```
+
 
 ### Order
 De gewenste sortering, in het format veldnaam=volgorde. Volgorde is niet verplicht, en wordt indien missend aangenomen als "ASC".

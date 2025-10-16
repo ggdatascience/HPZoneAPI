@@ -4,8 +4,20 @@
 \name{HPZoneAPI-package}
 \alias{HPZoneAPI}
 \alias{HPZoneAPI-package}
-\title{HPZoneAPI: What the Package Does (Title Case)}
+\title{HPZoneAPI: HPZone API Interface in R}
 \description{
-More about what it does (maybe more than one line) Use four spaces when indenting paragraphs within the Description.
+Package that simplifies the use of HPZone's API. Most of the annoying and labor-intensive parts of the interface are handled by wrapper functions.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ggdatascience/HPZoneAPI}
+  \item Report bugs at \url{https://github.com/ggdatascience/HPZoneAPI/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Dijkstra Aart \email{a.dijkstra@ggdnog.nl} [copyright holder]
+
 }
 \keyword{internal}

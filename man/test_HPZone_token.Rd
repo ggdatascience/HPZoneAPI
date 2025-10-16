@@ -13,7 +13,9 @@ No return value.
 Tests the supplied HPZone token against the token endpoint. Note that this does not check the type of access, only the functionality of the token.
 }
 \examples{
+\dontrun{
 HPZone_setup()
 # This will print the results.
 test_HPZone_token()
+}
 }

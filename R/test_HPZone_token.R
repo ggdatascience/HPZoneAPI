@@ -5,9 +5,11 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' HPZone_setup()
 #' # This will print the results.
 #' test_HPZone_token()
+#' }
 test_HPZone_token = function () {
   check_setup()
 

@@ -29,12 +29,14 @@ Note that the current maximum for batching is 500 rows, so increasing n_max is n
 This function is mainly intended for use when the query builder in [HPZone_request()] is insufficient. Usage of [HPZone_request()] is considerably easier otherwise.
 }
 \examples{
+\dontrun{
 # Note the single quotes to facilitate double quote encapsulation for arguments.
 HPZone_request_paginated('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
-Or equal, making use of the sprintf integration:
+# Or equal, making use of the sprintf integration:
 startdate = "2025-01-01"
 fields = c("Case_creation_date", "Case_number")
 HPZone_request_paginated('cases(where: { Case_creation_date: { gte: "\%s" } }) { items { \%s } }', startdate, stringr::str_c(fields, collapse=", "))
+}
 }
 \seealso{
 [HPZone_request()], [HPZone_convert_dates()]

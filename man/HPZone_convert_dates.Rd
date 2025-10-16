@@ -27,6 +27,8 @@ If situations: Start_date > Situation_creation_date
 If enquiries: Received_on > Date_closed
 }
 \examples{
-HPZone_request("cases", "basic", where=c("Case_creation_date", ">", "2025-01-01")) \%>\%
+\dontrun{
+HPZone_request("cases", "basic", where=c("Case_creation_date", ">", "2025-01-01")) |>
   HPZone_convert_dates()
+}
 }

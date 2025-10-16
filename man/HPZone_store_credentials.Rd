@@ -20,8 +20,10 @@ Safely stores the HPZone API details, so you don't need to put them in your scri
 Note that the actual values are not supplied as arguments, but requested using rstudioapi password prompts.
 }
 \examples{
+\dontrun{
 # simply execute this line to store credentials
 HPZone_store_credentials()
 # after use, setup can be ran without arguments:
 HPZone_setup()
+}
 }

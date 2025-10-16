@@ -20,9 +20,11 @@
 #' @examples
 #' # Note the difference between the raw and convenience functions.
 #' # These lines are equal:
+#' \dontrun{
 #' HPZone_request("cases", c("Case_creation_date", "Case_number"), where=c("Case_creation_date", ">=", "2025-01-01"))
 #' HPZone_request_query('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
 #' HPZone_request_raw('{"query": "{ cases(where: { Case_creation_date: { gte: \\"2025-01-01\\" } }) { items { Case_creation_date, Case_number } } }"}')
+#' }
 HPZone_request_raw = function (body, scope=API_env$scope_standard) {
   check_setup()
 
@@ -57,9 +59,11 @@ HPZone_request_raw = function (body, scope=API_env$scope_standard) {
 #' @examples
 #' # Note the difference between the raw and convenience functions.
 #' # These lines are equal:
+#' \dontrun{
 #' HPZone_request("cases", c("Case_creation_date", "Case_number"), where=c("Case_creation_date", ">=", "2025-01-01"))
 #' HPZone_request_query('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
 #' HPZone_request_raw('{"query": "{ cases(where: { Case_creation_date: { gte: \\"2025-01-01\\" } }) { items { Case_creation_date, Case_number } } }"}')
+#' }
 HPZone_request_query = function (query, ..., scope=API_env$scope_standard) {
   check_setup()
 
@@ -102,12 +106,14 @@ HPZone_request_query = function (query, ..., scope=API_env$scope_standard) {
 #' @seealso [HPZone_request()], [HPZone_convert_dates()]
 #'
 #' @examples
+#' \dontrun{
 #' # Note the single quotes to facilitate double quote encapsulation for arguments.
 #' HPZone_request_paginated('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
-#' Or equal, making use of the sprintf integration:
+#' # Or equal, making use of the sprintf integration:
 #' startdate = "2025-01-01"
 #' fields = c("Case_creation_date", "Case_number")
 #' HPZone_request_paginated('cases(where: { Case_creation_date: { gte: "%s" } }) { items { %s } }', startdate, stringr::str_c(fields, collapse=", "))
+#' }
 HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_standard) {
   check_setup()
 
@@ -177,6 +183,7 @@ HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_
 #'
 #' @return An object containing the requested data points. This can be in different forms, depending on the request, but is simplified as much as possible.
 #' @export
+#' @importFrom stats setNames
 #'
 #' @seealso  [HPZone_request_paginated()], [HPZone_request_query()], [HPZone_make_valid()], [HPZone_convert_dates()]
 #'
@@ -187,6 +194,7 @@ HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_
 #' - A list detailing the structure of the query, containing name-value pairs of keyword-selectors. This allows for complex and/or-structures, see the bottom example.
 #'
 #' @examples
+#' \dontrun{
 #' # These statements are equal:
 #' HPZone_request("cases", "all", where=c("Case_creation_date", ">", "2025-10-01"))
 #' HPZone_request("cases", "all", where=c("Case_creation_date", "gt", "2025-10-01"))
@@ -202,6 +210,7 @@ HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_
 #' # All cases after 2025-01-01 with either Leptospirosis or Malaria as infection.
 #' # Note the nested list; adding a c() without a list() will warp the structure of the list and break everything.
 #' HPZone_request("cases", "all", where=list("and"=list(c("Case_creation_date", "gte", "2025-01-01"), list("or"=c("Infection", "=", "Leptospirosis", "Infection", "==", "Malaria")))))
+#' }
 HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=F) {
   check_setup()
 
@@ -273,7 +282,7 @@ HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=F) {
   if ((is.vector(order) && any(!is.na(order))) || !is.na(order)) {
     if (is.null(names(order))) {
       # assume ASC
-      order = setNames(rep("ASC", length(order)), order)
+      order = stats::setNames(rep("ASC", length(order)), order)
     }
     if (any(names(order) == "")) {
       # some values are unnamed; flip name-value pair around

@@ -24,9 +24,11 @@ See the example for differences with [HPZone_request_raw()]. Note that results a
 \examples{
 # Note the difference between the raw and convenience functions.
 # These lines are equal:
+\dontrun{
 HPZone_request("cases", c("Case_creation_date", "Case_number"), where=c("Case_creation_date", ">=", "2025-01-01"))
 HPZone_request_query('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
 HPZone_request_raw('{"query": "{ cases(where: { Case_creation_date: { gte: \\\\"2025-01-01\\\\" } }) { items { Case_creation_date, Case_number } } }"}')
+}
 }
 \seealso{
 [HPZone_request()], [HPZone_request_paginated()], [HPZone_convert_dates()]

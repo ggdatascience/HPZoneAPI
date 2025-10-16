@@ -39,6 +39,8 @@ Note that client_id and client_secret should preferably not be supplied in this 
 HPZone_setup("id", "secret")
 
 # Recommended:
+\dontrun{
 HPZone_store_credentials() # call once
 HPZone_setup() # will automatically read stored credentials
+}
 }

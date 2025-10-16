@@ -32,6 +32,7 @@ The where clause can be specified in several formats. These can be:
 - A list detailing the structure of the query, containing name-value pairs of keyword-selectors. This allows for complex and/or-structures, see the bottom example.
 }
 \examples{
+\dontrun{
 # These statements are equal:
 HPZone_request("cases", "all", where=c("Case_creation_date", ">", "2025-10-01"))
 HPZone_request("cases", "all", where=c("Case_creation_date", "gt", "2025-10-01"))
@@ -47,6 +48,7 @@ HPZone_request("cases", "all", where=c("Case_creation_date", "gte", "2025-01-01"
 # All cases after 2025-01-01 with either Leptospirosis or Malaria as infection.
 # Note the nested list; adding a c() without a list() will warp the structure of the list and break everything.
 HPZone_request("cases", "all", where=list("and"=list(c("Case_creation_date", "gte", "2025-01-01"), list("or"=c("Infection", "=", "Leptospirosis", "Infection", "==", "Malaria")))))
+}
 }
 \seealso{
 [HPZone_request_paginated()], [HPZone_request_query()], [HPZone_make_valid()], [HPZone_convert_dates()]

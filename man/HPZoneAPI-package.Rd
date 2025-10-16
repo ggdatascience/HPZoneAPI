@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Dijkstra Aart \email{a.dijkstra@ggdnog.nl} [copyright holder]
+\strong{Maintainer}: Aart Dijkstra \email{a.dijkstra@ggdnog.nl} [copyright holder]
 
 }
 \keyword{internal}

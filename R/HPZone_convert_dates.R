@@ -17,8 +17,10 @@
 #' @importFrom dplyr coalesce
 #'
 #' @examples
-#' HPZone_request("cases", "basic", where=c("Case_creation_date", ">", "2025-01-01")) %>%
+#' \dontrun{
+#' HPZone_request("cases", "basic", where=c("Case_creation_date", ">", "2025-01-01")) |>
 #'   HPZone_convert_dates()
+#' }
 HPZone_convert_dates = function (data, search="dat(e|um)|Received_on", statdate="Date_stat") {
   dataset = data
   if (is.list(data) && "items" %in% names(data)) {

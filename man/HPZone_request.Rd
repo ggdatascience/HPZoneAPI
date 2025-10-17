@@ -27,27 +27,41 @@ Note that the take and skip elements are, by design, not present. If these are n
 }
 \details{
 The where clause can be specified in several formats. These can be:
-- A literal string containing GraphQL. E.g. 'Status: { eq: "Open" }'
-- A vector of strings containing three pairs: field, comparator, value. E.g. c("Status", "=", "Open"). Any usual R-style comparators are allowed and automatically translated, GraphQL comparators are left as-is.
-- A list detailing the structure of the query, containing name-value pairs of keyword-selectors. This allows for complex and/or-structures, see the bottom example.
+* A literal string containing GraphQL. E.g. "Status: \{ eq: \"Open\" \}"
+* A vector of strings containing three pairs: field, comparator, value. E.g. c("Status", "=", "Open"). Any usual R-style comparators are allowed and automatically translated, GraphQL comparators are left as-is.
+* A list detailing the structure of the query, containing name-value pairs of keyword-selectors. This allows for complex and/or-structures, see the bottom example.
 }
 \examples{
 \dontrun{
 # These statements are equal:
-HPZone_request("cases", "all", where=c("Case_creation_date", ">", "2025-10-01"))
-HPZone_request("cases", "all", where=c("Case_creation_date", "gt", "2025-10-01"))
+HPZone_request("cases", "all",
+               where=c("Case_creation_date", ">", "2025-10-01"))
+HPZone_request("cases", "all",
+               where=c("Case_creation_date", "gt", "2025-10-01"))
 
 # Selects cases after 2025-09-01, ordered by infection and then descending date.
-HPZone_request("cases", "all", where=c("Case_creation_date", ">", "2025-09-01"), order=c("Infection", "Case_creation_date"="desc"))
+HPZone_request("cases", "all",
+               where=c("Case_creation_date", ">", "2025-09-01"),
+               order=c("Infection", "Case_creation_date"="desc"))
 
 # Selects all cases which were registered after 2025-01-01 AND where Infection equals Leptospirosis.
-HPZone_request("cases", "all", where=list("and"=c("Case_creation_date", "gte", "2025-01-01", "Infection", "=", "Leptospirosis")))
+HPZone_request("cases", "all",
+               where=list("and"=c("Case_creation_date", "gte", "2025-01-01",
+                                  "Infection", "=", "Leptospirosis")))
 # Note that the default is AND, so this statement is equal:
-HPZone_request("cases", "all", where=c("Case_creation_date", "gte", "2025-01-01", "Infection", "=", "Leptospirosis"))
+HPZone_request("cases", "all",
+               where=c("Case_creation_date", "gte", "2025-01-01",
+                       "Infection", "=", "Leptospirosis"))
 
 # All cases after 2025-01-01 with either Leptospirosis or Malaria as infection.
-# Note the nested list; adding a c() without a list() will warp the structure of the list and break everything.
-HPZone_request("cases", "all", where=list("and"=list(c("Case_creation_date", "gte", "2025-01-01"), list("or"=c("Infection", "=", "Leptospirosis", "Infection", "==", "Malaria")))))
+# Note the nested list; adding a c() without a list() will warp the structure
+# of the list and break everything.
+HPZone_request("cases", "all",
+               where=list(
+                "and"=list(c("Case_creation_date", "gte", "2025-01-01"),
+                           list("or"=c("Infection", "=", "Leptospirosis",
+                                       "Infection", "==", "Malaria"))
+                          )))
 }
 }
 \seealso{

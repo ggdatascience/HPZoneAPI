@@ -17,6 +17,7 @@ Imports:
     jsonlite,
     keyring,
     lubridate,
+    magrittr,
     readxl,
     rstudioapi,
     safer,

@@ -1,3 +1,5 @@
+globalVariables("HPZone_fields")
+
 #' Takes a list of fields or endpoints and corrects them. This allows for short hand usage without having to check the documentation, e.g. 'Date of onset' instead of 'Date_of_onset'
 #'
 #' @param endpoints A list of desired endpoints.
@@ -21,7 +23,7 @@ HPZone_make_valid = function (endpoints=NULL, fields=NULL) {
       possible_fields = HPZone_fields$field[stringr::str_to_lower(HPZone_fields$endpoint) %in% endpoints]
       possible_fields_hr = HPZone_fields$field_hr[stringr::str_to_lower(HPZone_fields$endpoint) %in% endpoints]
     }
-    fields_valid = lapply(fields, \(x) {
+    fields_valid = unlist(lapply(fields, \(x) {
       index = grep(x, possible_fields, ignore.case=T)
       if (length(index) == 0) {
         index = grep(x, possible_fields_hr, ignore.case=T)
@@ -48,15 +50,15 @@ HPZone_make_valid = function (endpoints=NULL, fields=NULL) {
         stop("Multiple fields match the supplied description (", x, "): ", stringr::str_c(possible_fields[index], collapse=", "))
       }
       return(index)
-    }) |> unlist()
+    }))
     return(possible_fields[fields_valid])
   } else if (!is.null(endpoints)) {
-    possible_endpoints = unique(HPZone_fields$endpoint) |> str_to_lower()
-    endpoints_valid = lapply(endpoints, \(x) {
+    possible_endpoints = str_to_lower(unique(HPZone_fields$endpoint))
+    endpoints_valid = unlist(lapply(endpoints, \(x) {
       index = grep(x, possible_endpoints, ignore.case=T)
       if (length(index) != 1) stop("Invalid endpoint supplied: ", x)
       return(index)
-    }) |> unlist()
+    }))
     return(possible_endpoints[endpoints_valid])
   }
 }

@@ -42,11 +42,11 @@ HPZone_setup = function (client_id = NA, client_secret = NA, standard="standard"
     # check for stored credentials
     stored_keys = keyring::key_list()
     if (is.na(client_id) && "HPZone_client_id" %in% stored_keys$service) {
-      client_id = keyring::key_get("HPZone_client_id") |> safer::decrypt_string(key="Kdj(327KWpX%")
+      client_id = safer::decrypt_string(keyring::key_get("HPZone_client_id"), key="Kdj(327KWpX%")
     }
 
     if (is.na(client_secret) && "HPZone_client_secret" %in% stored_keys$service) {
-      client_secret = keyring::key_get("HPZone_client_secret") |> safer::decrypt_string(key="Kdj(327KWpX%")
+      client_secret = safer::decrypt_string(keyring::key_get("HPZone_client_secret"), key="Kdj(327KWpX%")
     }
   }
 

@@ -22,9 +22,18 @@ This should only be used as a last resort; if manual GraphQL queries are require
 # Note the difference between the raw and convenience functions.
 # These lines are equal:
 \dontrun{
-HPZone_request("cases", c("Case_creation_date", "Case_number"), where=c("Case_creation_date", ">=", "2025-01-01"))
-HPZone_request_query('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
-HPZone_request_raw('{"query": "{ cases(where: { Case_creation_date: { gte: \\\\"2025-01-01\\\\" } }) { items { Case_creation_date, Case_number } } }"}')
+HPZone_request("cases", c("Case_creation_date", "Case_number"),
+               where=c("Case_creation_date", ">=", "2025-01-01"))
+HPZone_request_query(paste0('cases(where: { ',
+                      'Case_creation_date: { gte: "2025-01-01" }',
+                      '})',
+                      '{ items { Case_creation_date, Case_number } }')
+                    )
+HPZone_request_raw(paste0('{"query": "{ cases(where: {',
+                            'Case_creation_date: { gte: \\\\"2025-01-01\\\\" }',
+                          '})',
+                          '{ items { Case_creation_date, Case_number } }',
+                          '}"}'))
 }
 }
 \seealso{

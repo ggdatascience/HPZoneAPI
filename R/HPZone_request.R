@@ -14,6 +14,7 @@
 #' @importFrom httr2 req_oauth_client_credentials
 #' @importFrom httr2 req_perform
 #' @importFrom jsonlite fromJSON
+#' @importFrom magrittr "%>%"
 #'
 #' @seealso [HPZone_request()], [HPZone_request_paginated()], [HPZone_request_query()]
 #'
@@ -21,9 +22,18 @@
 #' # Note the difference between the raw and convenience functions.
 #' # These lines are equal:
 #' \dontrun{
-#' HPZone_request("cases", c("Case_creation_date", "Case_number"), where=c("Case_creation_date", ">=", "2025-01-01"))
-#' HPZone_request_query('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
-#' HPZone_request_raw('{"query": "{ cases(where: { Case_creation_date: { gte: \\"2025-01-01\\" } }) { items { Case_creation_date, Case_number } } }"}')
+#' HPZone_request("cases", c("Case_creation_date", "Case_number"),
+#'                where=c("Case_creation_date", ">=", "2025-01-01"))
+#' HPZone_request_query(paste0('cases(where: { ',
+#'                       'Case_creation_date: { gte: "2025-01-01" }',
+#'                       '})',
+#'                       '{ items { Case_creation_date, Case_number } }')
+#'                     )
+#' HPZone_request_raw(paste0('{"query": "{ cases(where: {',
+#'                             'Case_creation_date: { gte: \\"2025-01-01\\" }',
+#'                           '})',
+#'                           '{ items { Case_creation_date, Case_number } }',
+#'                           '}"}'))
 #' }
 HPZone_request_raw = function (body, scope=API_env$scope_standard) {
   check_setup()
@@ -31,12 +41,12 @@ HPZone_request_raw = function (body, scope=API_env$scope_standard) {
   if (scope == "standard") scope = API_env$scope_standard
   if (scope == "extended") scope = API_env$scope_extended
 
-  req = httr2::request(API_env$data_url) |>
+  req = httr2::request(API_env$data_url) %>%
     httr2::req_headers(`content-type`="application/json",
                 accept="application/json",
-                scope=scope) |>
-    httr2::req_body_raw(body) |>
-    httr2::req_oauth_client_credentials(client=API_env$client) |>
+                scope=scope) %>%
+    httr2::req_body_raw(body) %>%
+    httr2::req_oauth_client_credentials(client=API_env$client) %>%
     httr2::req_perform()
 
   return(jsonlite::fromJSON(httr2::resp_body_json(req)))
@@ -60,9 +70,18 @@ HPZone_request_raw = function (body, scope=API_env$scope_standard) {
 #' # Note the difference between the raw and convenience functions.
 #' # These lines are equal:
 #' \dontrun{
-#' HPZone_request("cases", c("Case_creation_date", "Case_number"), where=c("Case_creation_date", ">=", "2025-01-01"))
-#' HPZone_request_query('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
-#' HPZone_request_raw('{"query": "{ cases(where: { Case_creation_date: { gte: \\"2025-01-01\\" } }) { items { Case_creation_date, Case_number } } }"}')
+#' HPZone_request("cases", c("Case_creation_date", "Case_number"),
+#'                where=c("Case_creation_date", ">=", "2025-01-01"))
+#' HPZone_request_query(paste0('cases(where: {',
+#'                               'Case_creation_date: { gte: "2025-01-01" }',
+#'                             '}) {',
+#'                               'items { Case_creation_date, Case_number }',
+#'                              '}'))
+#' HPZone_request_raw(paste0('{"query": "{ cases(where: {',
+#'                             'Case_creation_date: { gte: \\"2025-01-01\\" }',
+#'                           '}) {',
+#'                             'items { Case_creation_date, Case_number }',
+#'                           '} }"}'))
 #' }
 HPZone_request_query = function (query, ..., scope=API_env$scope_standard) {
   check_setup()
@@ -108,11 +127,19 @@ HPZone_request_query = function (query, ..., scope=API_env$scope_standard) {
 #' @examples
 #' \dontrun{
 #' # Note the single quotes to facilitate double quote encapsulation for arguments.
-#' HPZone_request_paginated('cases(where: { Case_creation_date: { gte: "2025-01-01" } }) { items { Case_creation_date, Case_number } }')
+#' HPZone_request_paginated(
+#'   paste0('cases(where: {',
+#'       'Case_creation_date: { gte: "2025-01-01" }',
+#'     '}) {',
+#'       'items { Case_creation_date, Case_number }',
+#'      '}'))
 #' # Or equal, making use of the sprintf integration:
 #' startdate = "2025-01-01"
 #' fields = c("Case_creation_date", "Case_number")
-#' HPZone_request_paginated('cases(where: { Case_creation_date: { gte: "%s" } }) { items { %s } }', startdate, stringr::str_c(fields, collapse=", "))
+#' HPZone_request_paginated(
+#'   'cases(where: { Case_creation_date: { gte: "%s" } }) { items { %s } }',
+#'    startdate, stringr::str_c(fields, collapse=", ")
+#' )
 #' }
 HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_standard) {
   check_setup()
@@ -141,7 +168,7 @@ HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_
   # add totalCount to query, if not already present
   if (!stringr::str_detect(query, stringr::fixed("totalCount"))) {
     # this is pretty simple; it should be before the last curly bracket
-    pos = stringr::str_locate_all(query, stringr::fixed("}")) |> unlist()
+    pos = unlist(stringr::str_locate_all(query, stringr::fixed("}")))
     pos = max(pos, na.rm=T)
     query = paste0(stringr::str_sub(query, end=pos-1), ", totalCount }")
   }
@@ -189,27 +216,41 @@ HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_
 #'
 #' @details
 #' The where clause can be specified in several formats. These can be:
-#' - A literal string containing GraphQL. E.g. 'Status: { eq: "Open" }'
-#' - A vector of strings containing three pairs: field, comparator, value. E.g. c("Status", "=", "Open"). Any usual R-style comparators are allowed and automatically translated, GraphQL comparators are left as-is.
-#' - A list detailing the structure of the query, containing name-value pairs of keyword-selectors. This allows for complex and/or-structures, see the bottom example.
+#' * A literal string containing GraphQL. E.g. "Status: \{ eq: \"Open\" \}"
+#' * A vector of strings containing three pairs: field, comparator, value. E.g. c("Status", "=", "Open"). Any usual R-style comparators are allowed and automatically translated, GraphQL comparators are left as-is.
+#' * A list detailing the structure of the query, containing name-value pairs of keyword-selectors. This allows for complex and/or-structures, see the bottom example.
 #'
 #' @examples
 #' \dontrun{
 #' # These statements are equal:
-#' HPZone_request("cases", "all", where=c("Case_creation_date", ">", "2025-10-01"))
-#' HPZone_request("cases", "all", where=c("Case_creation_date", "gt", "2025-10-01"))
+#' HPZone_request("cases", "all",
+#'                where=c("Case_creation_date", ">", "2025-10-01"))
+#' HPZone_request("cases", "all",
+#'                where=c("Case_creation_date", "gt", "2025-10-01"))
 #'
 #' # Selects cases after 2025-09-01, ordered by infection and then descending date.
-#' HPZone_request("cases", "all", where=c("Case_creation_date", ">", "2025-09-01"), order=c("Infection", "Case_creation_date"="desc"))
+#' HPZone_request("cases", "all",
+#'                where=c("Case_creation_date", ">", "2025-09-01"),
+#'                order=c("Infection", "Case_creation_date"="desc"))
 #'
 #' # Selects all cases which were registered after 2025-01-01 AND where Infection equals Leptospirosis.
-#' HPZone_request("cases", "all", where=list("and"=c("Case_creation_date", "gte", "2025-01-01", "Infection", "=", "Leptospirosis")))
+#' HPZone_request("cases", "all",
+#'                where=list("and"=c("Case_creation_date", "gte", "2025-01-01",
+#'                                   "Infection", "=", "Leptospirosis")))
 #' # Note that the default is AND, so this statement is equal:
-#' HPZone_request("cases", "all", where=c("Case_creation_date", "gte", "2025-01-01", "Infection", "=", "Leptospirosis"))
+#' HPZone_request("cases", "all",
+#'                where=c("Case_creation_date", "gte", "2025-01-01",
+#'                        "Infection", "=", "Leptospirosis"))
 #'
 #' # All cases after 2025-01-01 with either Leptospirosis or Malaria as infection.
-#' # Note the nested list; adding a c() without a list() will warp the structure of the list and break everything.
-#' HPZone_request("cases", "all", where=list("and"=list(c("Case_creation_date", "gte", "2025-01-01"), list("or"=c("Infection", "=", "Leptospirosis", "Infection", "==", "Malaria")))))
+#' # Note the nested list; adding a c() without a list() will warp the structure
+#' # of the list and break everything.
+#' HPZone_request("cases", "all",
+#'                where=list(
+#'                 "and"=list(c("Case_creation_date", "gte", "2025-01-01"),
+#'                            list("or"=c("Infection", "=", "Leptospirosis",
+#'                                        "Infection", "==", "Malaria"))
+#'                           )))
 #' }
 HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=F) {
   check_setup()
@@ -244,7 +285,7 @@ HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=F) {
       fields = c("Contact_number", "Contact_creation_date")
   }
   if (length(fields) == 1) {
-    fields = strsplit(fields, ",") |> unlist() |> trimws()
+    fields = trimws(unlist(strsplit(fields, ",")))
   }
   fields = HPZone_make_valid(endpoint, fields)
 
@@ -293,7 +334,7 @@ HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=F) {
     }
 
     names(order) = HPZone_make_valid(endpoint, fields=names(order))
-    order = toupper(order) |> trimws()
+    order = trimws(toupper(order))
 
     order_graphql = paste0("{ ", names(order), ": ", unname(order), " }")
 

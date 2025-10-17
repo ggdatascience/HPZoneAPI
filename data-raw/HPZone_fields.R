@@ -1,5 +1,7 @@
 usethis::use_import_from("readxl", "read_xlsx")
 
+#' List of available fields in the API
+#' @keywords external
 HPZone_fields = readxl::read_xlsx("data-raw/graphql_fields.xlsx")
 colnames(HPZone_fields) = c("endpoint", "field_hr", "field", "scope_standard", "scope_extended", "in_basic", "note")
 HPZone_fields$scope_standard = HPZone_fields$scope_standard == "Yes"

@@ -27,7 +27,7 @@ HPZone_convert_dates = function (data, search="dat(e|um)|Received_on", statdate=
     dataset = data$items
   }
 
-  cols = which(colnames(dataset) |> stringr::str_detect(stringr::regex(search, ignore_case=T)))
+  cols = stringr::str_detect(which(colnames(dataset), stringr::regex(search, ignore_case=T)))
   for (col in cols) {
     dataset[[col]] = suppressWarnings(lubridate::ymd_hms(dataset[[col]]))
   }

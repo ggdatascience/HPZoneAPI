@@ -1,12 +1,12 @@
 Package: HPZoneAPI
 Type: Package
-Title: HPZone API Interface in R
+Title: 'HPZone' API Interface
 Version: 1.0.0
 Authors@R: person("Aart", "Dijkstra", email="a.dijkstra@ggdnog.nl", role=c("aut", "cre", "cph")) 
 Maintainer: Aart Dijkstra <a.dijkstra@ggdnog.nl>
-Description: Package that simplifies the use of HPZone's API. Most of the annoying and labor-intensive parts of the interface are handled by wrapper functions.
-URL: https://github.com/ggdatascience/HPZoneAPI
-BugReports: https://github.com/ggdatascience/HPZoneAPI/issues
+Description: Package that simplifies the use of the 'HPZone' API. Most of the annoying and labor-intensive parts of the interface are handled by wrapper functions.
+URL: <https://github.com/ggdatascience/HPZoneAPI>
+BugReports: <https://github.com/ggdatascience/HPZoneAPI/issues>
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

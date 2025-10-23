@@ -13,19 +13,23 @@
 test_HPZone_token = function () {
   check_setup()
 
+  returns = list()
+
   if (!is.na(API_env$scope_standard)) {
-    print("Testing the standard scope credentials...")
+    message("Testing the standard scope credentials...")
     token = httr2::oauth_flow_client_credentials(client=API_env$client)
-    print(token)
+    returns = append(returns, list("standard"=token))
   }
 
   if (!is.na(API_env$scope_extended)) {
-    print("Testing the extended scope credentials...")
+    message("Testing the extended scope credentials...")
     token = httr2::oauth_flow_client_credentials(client=API_env$client)
-    print(token)
+    returns = append(returns, list("extended"=token))
   }
 
   if (is.na(API_env$scope_standard) && is.na(API_env$scope_extended)) {
-    print("Neither scope was entered using HPZone_setup(). Terminating.")
+    return("Neither scope was entered using HPZone_setup(). Terminating.")
   }
+
+  return(returns)
 }

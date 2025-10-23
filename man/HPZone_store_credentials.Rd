@@ -5,7 +5,7 @@
 \title{Safely stores the HPZone API details, so you don't need to put them in your script. The default OS keyring backend is used through the keyring-package. Values are stored in an encrypted format to prevent harvesting by other applications.
 Note that the actual values are not supplied as arguments, but requested using rstudioapi password prompts.}
 \usage{
-HPZone_store_credentials(client_id = T, client_secret = T)
+HPZone_store_credentials(client_id = TRUE, client_secret = TRUE)
 }
 \arguments{
 \item{client_id}{True / false: whether the client_id should be stored.}

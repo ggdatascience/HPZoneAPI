@@ -4,15 +4,15 @@
 \name{HPZoneAPI-package}
 \alias{HPZoneAPI}
 \alias{HPZoneAPI-package}
-\title{HPZoneAPI: HPZone API Interface in R}
+\title{HPZoneAPI: 'HPZone' API Interface}
 \description{
-Package that simplifies the use of HPZone's API. Most of the annoying and labor-intensive parts of the interface are handled by wrapper functions.
+Package that simplifies the use of the 'HPZone' API. Most of the annoying and labor-intensive parts of the interface are handled by wrapper functions.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/ggdatascience/HPZoneAPI}
-  \item Report bugs at \url{https://github.com/ggdatascience/HPZoneAPI/issues}
+  \item \url{<https://github.com/ggdatascience/HPZoneAPI>}
+  \item Report bugs at \url{<https://github.com/ggdatascience/HPZoneAPI/issues>}
 }
 
 }

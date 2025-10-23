@@ -4,7 +4,7 @@
 \alias{HPZone_necessary_scope}
 \title{Determines the necessary scope for a given list of fields.}
 \usage{
-HPZone_necessary_scope(fields, endpoint = "Cases", resolve_fieldnames = T)
+HPZone_necessary_scope(fields, endpoint = "Cases", resolve_fieldnames = TRUE)
 }
 \arguments{
 \item{fields}{List of desired fields from a query.}

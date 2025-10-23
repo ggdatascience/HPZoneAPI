@@ -85,7 +85,7 @@ HPZone_setup = function (client_id = NA, client_secret = NA, standard="standard"
 #' # after use, setup can be ran without arguments:
 #' HPZone_setup()
 #' }
-HPZone_store_credentials = function (client_id = T, client_secret = T) {
+HPZone_store_credentials = function (client_id = TRUE, client_secret = TRUE) {
   if (client_id) {
     secret_id = rstudioapi::askForPassword("Please enter the client_id")
     keyring::key_set_with_value("HPZone_client_id", password=safer::encrypt_string(secret_id, key="Kdj(327KWpX%"))

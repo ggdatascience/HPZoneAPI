@@ -252,7 +252,7 @@ HPZone_request_paginated = function (query, ..., n_max=500, scope=API_env$scope_
 #'                                        "Infection", "==", "Malaria"))
 #'                           )))
 #' }
-HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=F) {
+HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=FALSE) {
   check_setup()
 
   # valid endpoint?

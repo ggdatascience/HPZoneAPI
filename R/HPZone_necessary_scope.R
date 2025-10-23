@@ -12,7 +12,7 @@
 #' HPZone_necessary_scope(c("Diagnosis", "Case_number", "Entered_by"))
 #' # Family_name requires the extended scope; desired response = extended
 #' HPZone_necessary_scope(c("Diagnosis", "Case_number", "Family_name"))
-HPZone_necessary_scope = function (fields, endpoint="Cases", resolve_fieldnames=T) {
+HPZone_necessary_scope = function (fields, endpoint="Cases", resolve_fieldnames=TRUE) {
   if (is.na(endpoint) || is.null(endpoint)) {
     stop("No valid endpoint supplied.")
   }

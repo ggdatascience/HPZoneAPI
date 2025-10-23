@@ -4,7 +4,7 @@
 \alias{HPZone_request}
 \title{Performs a HPZone request with the given parameters.}
 \usage{
-HPZone_request(endpoint, fields, where = NA, order = NA, verbose = F)
+HPZone_request(endpoint, fields, where = NA, order = NA, verbose = FALSE)
 }
 \arguments{
 \item{endpoint}{The requested endpoint. Can be "cases", "situations", "enquiries", "contacts", or "actions". Case mismatch or spelling mismatch is automatically corrected with HPZone_make_valid().}

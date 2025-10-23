@@ -6,13 +6,13 @@
 \alias{HPZoneAPI-package}
 \title{HPZoneAPI: 'HPZone' API Interface}
 \description{
-Package that simplifies the use of the 'HPZone' API. Most of the annoying and labor-intensive parts of the interface are handled by wrapper functions.
+Package that simplifies the use of the 'HPZone' API. Most of the annoying and labor-intensive parts of the interface are handled by wrapper functions. Note that the API and its details are not publicly available. Information can be found at \url{https://www.ggdghorkennisnet.nl/groep/726-platform-infectieziekte-epidemiologen/documenten/map/9609} for those with access.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{<https://github.com/ggdatascience/HPZoneAPI>}
-  \item Report bugs at \url{<https://github.com/ggdatascience/HPZoneAPI/issues>}
+  \item \url{https://github.com/ggdatascience/HPZoneAPI}
+  \item Report bugs at \url{https://github.com/ggdatascience/HPZoneAPI/issues}
 }
 
 }

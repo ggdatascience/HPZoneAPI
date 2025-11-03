@@ -305,15 +305,15 @@ HPZone_request = function (endpoint, fields, where=NA, order=NA, verbose=FALSE) 
     #   e.g.: list("and"=c("Infection", "==", "Hepatitis B", "Status", "==", "Open"))
     # - R-like syntax: where = "field comparator value", e.g. where = "Infection == "
     # list of selectors
-    if (is.list(where) || is.vector(where)) {
-      where = parse_query_list(endpoint, where)
-    } else if (length(where) == 1 && is.character(where)) {
+    if (length(where) == 1 && is.character(where)) {
       if (is.null(names(where))) {
         # literal string, do nothing
       } else {
         # convert syntax
         where = parse_query_list(endpoint, where)
       }
+    } else if (is.list(where) || is.vector(where)) {
+      where = parse_query_list(endpoint, where)
     } else {
       stop("Unknown format for the where clause supplied. Consult the documentation.")
     }
@@ -401,6 +401,9 @@ parse_query_list = function (endpoint, where) {
     }
     return(stringr::str_c(where_elements, collapse=", "))
   } else if (is.character(where) && length(where) == 3) {
+    # in case of a numeric value, GraphQL wants no quotes
+    if (grepl("^[0-9.,]+$", where[3]) || is.numeric(where[3]))
+      return(paste0(HPZone_make_valid(endpoint, where[1]), ": { ", convert_graphql(where[2]), ": ", where[3], " }"))
     return(paste0(HPZone_make_valid(endpoint, where[1]), ": { ", convert_graphql(where[2]), ": \"", where[3], "\" }"))
   }
   else if (is.character(where) && length(where) %% 3 == 0) {

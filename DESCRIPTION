@@ -1,7 +1,7 @@
 Package: HPZoneAPI
 Type: Package
 Title: 'HPZone' API Interface
-Version: 1.1.0
+Version: 1.1.0.9000
 Authors@R: person("Aart", "Dijkstra", email="a.dijkstra@ggdnog.nl", role=c("aut", "cre", "cph")) 
 Maintainer: Aart Dijkstra <a.dijkstra@ggdnog.nl>
 Description: Package that simplifies the use of the 'HPZone' API. Most of the annoying and labor-intensive parts of the interface are handled by wrapper functions. Note that the API and its details are not publicly available. Information can be found at <https://www.ggdghorkennisnet.nl/groep/726-platform-infectieziekte-epidemiologen/documenten/map/9609> for those with access. 
